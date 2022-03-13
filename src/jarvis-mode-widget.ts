@@ -108,14 +108,26 @@ export class BoilerplateCard extends LitElement {
         width: 100%;
       }
       .jarvis-widget {
+        font-weight: 200;
         height: 100%;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        padding: 20px;
-        box-sizing: border-box;
+        padding-left: 150px;
+        font-size: 2.5em;
+        line-height: 2em;
+      }
+      .jarvis-mode-wrapper {
         border: 1px solid #fff;
+        padding: 10px 20px;
+        background-color: rgba(0,0,0,.3);
+      }
+      .jarvis-mode-label {
+        display: inline-block;
+        text-transform: uppercase;
+      }
+      .jarvis-mode-state {
+        display: inline-block;
+        padding-left: 30px;
+        font-weight: 400;
+        text-transform: uppercase;
       }
     `;
   }
@@ -141,16 +153,19 @@ export class BoilerplateCard extends LitElement {
 
     return html`
       <ha-card
-        .header=${this.config.name}
         @action=${this._handleAction}
         .actionHandler=${actionHandler({
           hasHold: hasAction(this.config.hold_action),
           hasDoubleClick: hasAction(this.config.double_tap_action),
         })}
         tabindex="0"
-        .label=${`Boilerplate: ${this.config || 'No Entity Defined'}`}
       >
-        <div class='jarvis-widget'>It's the template!</div>
+        <div class='jarvis-widget'>
+          <div class='jarvis-mode-wrapper'>
+            <div class='jarvis-mode-label'>Mode:</div>
+            <div class='jarvis-mode-state'>${this.hass.states[this.config.entity].state}</div>
+          </div>
+        </div>
       </ha-card>
     `;
   }
