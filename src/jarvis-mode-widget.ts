@@ -103,6 +103,10 @@ export class BoilerplateCard extends LitElement {
   static get styles(): CSSResultGroup {
     return css`
       /* REPLACE "jarvis-mode-widget" with actual widget name */
+      @keyframes pulse {
+        from {opacity: 0;}
+        to {opacity: 1;}
+      }
       .type-custom-jarvis-mode-widget {
         height: 100%;
         width: 100%;
@@ -110,24 +114,36 @@ export class BoilerplateCard extends LitElement {
       .jarvis-widget {
         font-weight: 200;
         height: 100%;
-        padding-left: 150px;
-        font-size: 2.5em;
+        font-size: 2em;
         line-height: 2em;
+        padding-left: 100px;
+        padding-right: 7px;
       }
       .jarvis-mode-wrapper {
         border: 1px solid #fff;
-        padding: 10px 20px;
         background-color: rgba(0,0,0,.3);
+        padding: 5px 15px;
+      }
+      .jarvis-mode-wrapper.arming .jarvis-mode-state {
+        animation-name: pulse;
+        animation-duration: .5s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
       }
       .jarvis-mode-label {
-        display: inline-block;
         text-transform: uppercase;
+        font-size: 1rem;
+        line-height: 1em;
+        font-weight: 300;
+        display: inline-block;
+        position: relative;
+        top: -10px;
+        margin-right: 20px;
       }
       .jarvis-mode-state {
-        display: inline-block;
-        padding-left: 30px;
         font-weight: 400;
         text-transform: uppercase;
+        display: inline-block;
       }
     `;
   }
@@ -151,6 +167,19 @@ export class BoilerplateCard extends LitElement {
       return this._showError('error message');
     }
 
+    const armedStates = ['armed_away', 'armed_home', 'armed_vacation']
+    const alarmState = this.hass.states[this.config.entity].state
+
+    let alarmName
+
+    if (armedStates.includes(alarmState)) {
+      alarmName = 'Armed'
+    } else if (alarmState === 'armed_night') {
+      alarmName = 'Night mode'
+    } else {
+      alarmName = alarmState
+    }
+
     return html`
       <ha-card
         @action=${this._handleAction}
@@ -161,9 +190,9 @@ export class BoilerplateCard extends LitElement {
         tabindex="0"
       >
         <div class='jarvis-widget'>
-          <div class='jarvis-mode-wrapper'>
-            <div class='jarvis-mode-label'>Mode:</div>
-            <div class='jarvis-mode-state'>${this.hass.states[this.config.entity].state}</div>
+          <div class=${'jarvis-mode-wrapper '+alarmName}>
+            <div class='jarvis-mode-label'>Sentry mode:</div>
+            <div class='jarvis-mode-state'>${alarmName}</div>
           </div>
         </div>
       </ha-card>
