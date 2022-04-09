@@ -114,15 +114,19 @@ export class BoilerplateCard extends LitElement {
       .jarvis-widget {
         font-weight: 200;
         height: 100%;
-        font-size: 2em;
         line-height: 2em;
-        padding-left: 100px;
-        padding-right: 7px;
+        display: flex;
+        margin-right: 7px;
+        flex-direction: row-reverse;
+        align-items: center;
       }
       .jarvis-mode-wrapper {
-        border: 1px solid #fff;
-        background-color: rgba(0,0,0,.3);
+        background-color: rgb(72, 75, 92);
         padding: 5px 15px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
       }
       .jarvis-mode-wrapper.arming .jarvis-mode-state {
         animation-name: pulse;
@@ -132,18 +136,18 @@ export class BoilerplateCard extends LitElement {
       }
       .jarvis-mode-label {
         text-transform: uppercase;
-        font-size: 1rem;
-        line-height: 1em;
+        font-size: 1.2rem;
         font-weight: 300;
-        display: inline-block;
-        position: relative;
-        top: -10px;
+        font-stretch: extra-expanded;
         margin-right: 20px;
       }
       .jarvis-mode-state {
-        font-weight: 400;
+        font-weight: 700;
         text-transform: uppercase;
         display: inline-block;
+        font-size: 1.5rem;
+        font-stretch: extra-expanded;
+        margin-right: 20px;
       }
     `;
   }
