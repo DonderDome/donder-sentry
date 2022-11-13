@@ -117,7 +117,8 @@ export class BoilerplateCard extends LitElement {
         line-height: 2em;
         display: flex;
         margin-right: 7px;
-        flex-direction: row-reverse;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
         color: #fff;
       }
@@ -149,6 +150,24 @@ export class BoilerplateCard extends LitElement {
         font-size: 1.5rem;
         font-stretch: extra-expanded;
         margin-right: 20px;
+      }
+      .jarvis-mode-automations {
+        display: flex;
+        flex-direction: row;
+      }
+      .jarvis-mode-automations .jarvis-mode-automation {
+        text-transform: uppercase;
+        padding: 14px 21px 0px;
+        background: url('/local/jarvis/assets/cctv_frame_fat.svg');
+        margin-left: 8px;
+      }
+      .jarvis-mode-automation .automation-icon{
+        max-height: 30px;
+      }
+      .jarvis-mode-automation .automation-name{
+        font-size: 0.8em;
+        width: 30px;
+        text-align: center;
       }
     `;
   }
@@ -195,6 +214,21 @@ export class BoilerplateCard extends LitElement {
         tabindex="0"
       >
         <div class='jarvis-widget'>
+          <div class='jarvis-mode-automations'>
+          ${this.config.automations.map(e => {
+            return html`
+              <div class='jarvis-mode-automation'>
+                <div class='automation-icon'>
+                  ${console.log(this.config.automations, e)}
+                  <svg-item state=${e.icon}></svg-item>
+                </div>
+                <div class='automation-name'>
+                  ${e.name}
+                </div>
+              </div>
+            `
+          })}
+          </div>
           <div class=${'jarvis-mode-wrapper '+alarmName}>
             <div class='jarvis-mode-label'>Sentry mode:</div>
             <div class='jarvis-mode-state'>${alarmName}</div>
