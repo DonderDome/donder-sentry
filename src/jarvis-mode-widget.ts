@@ -119,6 +119,7 @@ export class BoilerplateCard extends LitElement {
         margin-right: 7px;
         flex-direction: row-reverse;
         align-items: center;
+        color: #fff;
       }
       .jarvis-mode-wrapper {
         background-color: rgb(72, 75, 92);
