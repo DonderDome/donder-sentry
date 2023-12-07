@@ -1,0 +1,340 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  LitElement,
+  html,
+  TemplateResult,
+  css,
+  PropertyValues,
+  CSSResultGroup,
+} from 'lit';
+import { property, state } from "lit/decorators";
+import {
+  HomeAssistant,
+  hasConfigOrEntityChanged,
+  hasAction,
+  ActionHandlerEvent,
+  handleAction,
+  LovelaceCardEditor,
+  getLovelace,
+} from 'custom-card-helpers'; // This is a community maintained npm module with common helper functions/types. https://github.com/custom-cards/custom-card-helpers
+import { CARD_VERSION } from './constants';
+import './editor';
+
+import type { BoilerplateCardConfig } from './types';
+import { actionHandler } from './action-handler-directive';
+
+/* eslint no-console: 0 */
+console.info(
+  `%c  JARVIS-MODE-WIDGET \n%c  version: ${CARD_VERSION}  `,
+  'color: orange; font-weight: bold; background: black',
+  'color: white; font-weight: bold; background: dimgray',
+);
+
+(window as any).customCards = (window as any).customCards || [];
+(window as any).customCards.push({
+  type: 'donder-sentry',
+  name: 'Boilerplate Card',
+  description: 'A template custom card for you to create something awesome',
+});
+
+export class BoilerplateCard extends LitElement {
+  public static async getConfigElement(): Promise<LovelaceCardEditor> {
+    // REPLACE "donder-sentry" with widget name, everywhere in the project
+    // REPLACE the file name with the actual widget name
+    return document.createElement('donder-sentry-editor');
+  }
+
+  public static getStubConfig(): Record<string, unknown> {
+    return {};
+  }
+
+  @property({ attribute: false }) public hass!: HomeAssistant;
+  @state() private config!: BoilerplateCardConfig;
+
+  public setConfig(config: BoilerplateCardConfig): void {
+    // TODO Check for required fields and that they are of the proper format
+    if (!config) {
+      throw new Error('Invalid configuration');
+    }
+
+    if (config.test_gui) {
+      getLovelace().setEditMode(true);
+    }
+
+    this.config = {
+      name: 'Boilerplate',
+      ...config,
+    };
+  }
+
+  protected shouldUpdate(changedProps: PropertyValues): boolean {
+    if (!this.config) {
+      return false;
+    }
+
+    return hasConfigOrEntityChanged(this, changedProps, false);
+  }
+
+  protected hasConfigOrEntityChanged(element: any, changedProps: PropertyValues, forceUpdate: boolean): boolean {
+    if (changedProps.has('config') || forceUpdate) {
+      return true;
+    }
+    
+    const warningStates = element.hass.states['donder_sentry.global']?.state
+    const entityState = element.hass.states[this.config.entity].state
+    const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
+
+    if (oldHass && this.config.entity) {
+      const oldWarningStates = oldHass.states['donder_sentry.global']?.state
+      const OldEntityState = oldHass.states[this.config.entity].state
+      
+      if (entityState !== OldEntityState) {
+        return true
+      } else if (warningStates !== oldWarningStates) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  }
+
+  private handleClick(): void {
+    const { env } = this.config
+    const alarmState = this.hass.states[this.config.entity].state
+    const armedStates = ['armed_away', 'armed_night', 'armed_vacation', 'arming', 'triggered', 'armed_home']
+
+    if (env) {
+      if (armedStates.includes(alarmState)) {
+        this.hass.callService('browser_mod', 'popup', {
+          content: {
+            type: 'alarm-panel',
+            name: 'Donder Sentry',
+            show_keypad: true,
+            entity: this.config.entity,
+          },
+          browser_id: localStorage.getItem('browser_mod-browser-id'),
+          card_mod: {
+            style:{
+              "ha-dialog$": `div.mdc-dialog div.mdc-dialog__scrim {
+                -webkit-backdrop-filter: blur(0.7em);
+                backdrop-filter: blur(0.7em);
+                transition: none !important;
+                background-color: rgba(0, 0, 0, 0.5) !important;
+              } div.mdc-dialog div.mdc-dialog__surface {
+                border-radius: 5px;
+                width: 400px;
+                min-width: 300px !important;
+              } div.mdc-dialog div.mdc-dialog__container {
+                height: auto !important;
+              }
+              `,
+            }
+          }
+        })
+      } else {
+        this.hass.callService('browser_mod', 'popup', {
+          content: {
+            type: 'custom:donder-custom-component',
+            component: 'sentry-modal',
+            entity: this.config.entity,
+            modes: ['arm_away', 'arm_home', 'arm_vacation']
+          },
+          left_button: "Close",
+          left_button_action: this.hass.callService('browser_mod', 'close_popup', {browser_id: localStorage.getItem('browser_mod-browser-id')}),
+          browser_id: localStorage.getItem('browser_mod-browser-id'),
+          card_mod: {
+            style:{
+              "ha-dialog$": `div.mdc-dialog div.mdc-dialog__scrim {
+                -webkit-backdrop-filter: blur(0.7em);
+                backdrop-filter: blur(0.7em);
+                transition: none !important;
+                background-color: rgba(0, 0, 0, 0.5) !important;
+              } div.mdc-dialog div.mdc-dialog__surface {
+                border-radius: 5px;
+                width: 400px;
+                min-width: 300px !important;
+              } div.mdc-dialog div.mdc-dialog__container {
+                height: auto !important;
+              }
+              `,
+            }
+          }
+        }) 
+      }
+    }
+  }
+
+  protected _handleAction(ev: ActionHandlerEvent): void {
+    const { action } = ev?.detail
+
+    if (action === 'tap') {
+      this.handleClick()
+    }
+  }
+
+  private _showWarning(warning: string): TemplateResult {
+    return html`
+      <hui-warning>${warning}</hui-warning>
+    `;
+  }
+
+  private _showError(error: string): TemplateResult {
+    const errorCard = document.createElement('hui-error-card');
+    errorCard.setConfig({
+      type: 'error',
+      error,
+      origConfig: this.config,
+    });
+
+    return html`
+      ${errorCard}
+    `;
+  }
+
+  static get styles(): CSSResultGroup {
+    return css`
+      /* REPLACE "donder-mode-widget" with actual widget name */
+      @keyframes pulse {
+        from {opacity: 0;}
+        to {opacity: 1;}
+      }
+      .type-custom-donder-mode-widget {
+        height: 100%;
+        width: 100%;
+      }
+      .donder-sizer {
+        max-width: 100%;
+        opacity: 0;
+      }
+      .donder-widget {
+        color: rgb(255, 255, 255);
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: 10px;
+        padding-bottom: 12px;
+      }
+      .donder-mode-wrapper {
+        background-color: rgba(102, 102, 102, 0.3);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-sizing: border-box;
+        border-radius: 3px;
+      }
+      .donder-mode-wrapper .donder-mode-label {
+        opacity: .3;
+      }
+      .donder-mode-wrapper.arming .donder-mode-label {
+        animation-name: pulse;
+        animation-duration: .5s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
+      .donder-mode-wrapper.armed_away,
+      .donder-mode-wrapper.armed_night,
+      .donder-mode-wrapper.armed_home,
+      .donder-mode-wrapper.armed_vacation {
+        background-color: rgb(0, 78, 79);
+        border: 2px solid rgb(97, 236, 189);
+      }
+      .donder-mode-wrapper.armed_away .donder-mode-label,
+      .donder-mode-wrapper.armed_night .donder-mode-label,
+      .donder-mode-wrapper.armed_home .donder-mode-label,
+      .donder-mode-wrapper.arming .donder-mode-label,
+      .donder-mode-wrapper.triggered .donder-mode-label,
+      .donder-mode-wrapper.armed_vacation .donder-mode-label {
+        opacity: 1;
+      }
+      .donder-mode-wrapper.on {
+        background-color: rgba(214, 163, 25, .2);
+        border: 2px solid rgb(214, 163, 25);
+      }
+      .donder-mode-wrapper.triggered {
+        background-color: rgba(132, 63, 77, .3);
+        border: 2px solid red;
+      }
+      .donder-mode-label {
+        text-transform: uppercase;
+        font-size: 1.2rem;
+        font-weight: 300;
+        font-stretch: extra-expanded;
+        width: 50%;
+      }
+      .donder-mode-state {
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+        font-size: 1.5rem;
+        font-stretch: extra-expanded;
+        margin-right: 20px;
+      }
+      @media (max-width: 600px) {
+        .donder-widget {
+          display: block;
+        }
+      }
+    `;
+  }
+
+  protected render(): TemplateResult | void {
+    if (this.config.show_warning) {
+      return this._showWarning('warning message');
+    }
+
+    if (this.config.show_error) {
+      return this._showError('error message');
+    }
+
+    const armedStates = ['armed_away', 'armed_night', 'armed_vacation', 'arming', 'triggered', 'armed_home']
+    const alarmState = this.hass.states[this.config.entity].state
+    const warningStates = this.hass.states['donder_sentry.global']?.state
+    const warningState = warningStates
+      ? JSON.parse(warningStates.replace(/'/g, '"'))?.length > 0
+        ? 'on'
+        : 'off'
+      : 'off'
+
+    let alarmIcon
+
+    if (armedStates.includes(alarmState)) {
+      alarmIcon = 'mode-sentry'
+    } else {
+      alarmIcon = 'mode-normal'
+    }
+
+    return html`
+      <ha-card
+        @action=${this._handleAction}
+        .actionHandler=${actionHandler({
+          hasHold: hasAction(this.config.hold_action),
+          hasDoubleClick: hasAction(this.config.double_tap_action),
+        })}
+        tabindex="0"
+        .label=${`Boilerplate: ${this.config || 'No Entity Defined'}`}
+      >
+        <div class='donder-widget'>
+          <div class=${'donder-mode-wrapper '+alarmState+' '+warningState}>
+            <div class='donder-mode-label'>
+              <svg-item state=${alarmIcon}></svg-item>
+            </div>
+          </div>
+        </div>
+      </ha-card>
+    `;
+  }
+}
+
+customElements.define("donder-sentry", BoilerplateCard);

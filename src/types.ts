@@ -2,7 +2,7 @@ import { ActionConfig, LovelaceCard, LovelaceCardConfig, LovelaceCardEditor } fr
 
 declare global {
   interface HTMLElementTagNameMap {
-    'jarvis-mode-widget-editor': LovelaceCardEditor;
+    'donder-sentry-editor': LovelaceCardEditor;
     'hui-error-card': LovelaceCard;
   }
 }

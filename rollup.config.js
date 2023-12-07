@@ -32,7 +32,7 @@ const plugins = [
 
 export default [
   {
-    input: 'src/jarvis-mode-widget.ts',
+    input: 'src/donder-sentry.ts',
     output: {
       dir: 'dist',
       format: 'es',
