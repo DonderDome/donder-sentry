@@ -25,7 +25,7 @@ import { actionHandler } from './action-handler-directive';
 
 /* eslint no-console: 0 */
 console.info(
-  `%c  JARVIS-MODE-WIDGET \n%c  version: ${CARD_VERSION}  `,
+  `%c  Donder Sentry \n%c  version: ${CARD_VERSION}  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -33,7 +33,7 @@ console.info(
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
   type: 'donder-sentry',
-  name: 'Boilerplate Card',
+  name: 'Donder Sentry',
   description: 'A template custom card for you to create something awesome',
 });
 
@@ -209,77 +209,48 @@ export class BoilerplateCard extends LitElement {
         opacity: 0;
       }
       .donder-widget {
-        color: rgb(255, 255, 255);
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        height: 100%;
-        width: 100%;
+        background-color: var(--card-background-color);
+        color: var(--text-primary-color);
+        padding: 15px 22px 22px;
         box-sizing: border-box;
-        padding-right: 10px;
-        padding-bottom: 12px;
+        text-align: center;
       }
-      .donder-mode-wrapper {
-        background-color: rgba(102, 102, 102, 0.3);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        align-content: center;
-        margin-right: 10px;
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        box-sizing: border-box;
-        border-radius: 3px;
-      }
-      .donder-mode-wrapper .donder-mode-label {
+      .donder-widget .donder-mode-icon {
         opacity: .3;
+        padding: 20px 0;
+        margin: 0 auto;
       }
-      .donder-mode-wrapper.arming .donder-mode-label {
+      .donder-widget.arming .donder-mode-icon {
         animation-name: pulse;
         animation-duration: .5s;
         animation-iteration-count: infinite;
         animation-direction: alternate;
       }
-      .donder-mode-wrapper.armed_away,
-      .donder-mode-wrapper.armed_night,
-      .donder-mode-wrapper.armed_home,
-      .donder-mode-wrapper.armed_vacation {
+      .donder-widget.armed_away,
+      .donder-widget.armed_night,
+      .donder-widget.armed_home,
+      .donder-widget.armed_vacation {
         background-color: rgb(0, 78, 79);
         border: 2px solid rgb(97, 236, 189);
       }
-      .donder-mode-wrapper.armed_away .donder-mode-label,
-      .donder-mode-wrapper.armed_night .donder-mode-label,
-      .donder-mode-wrapper.armed_home .donder-mode-label,
-      .donder-mode-wrapper.arming .donder-mode-label,
-      .donder-mode-wrapper.triggered .donder-mode-label,
-      .donder-mode-wrapper.armed_vacation .donder-mode-label {
+      .donder-widget.armed_away .donder-mode-icon,
+      .donder-widget.armed_night .donder-mode-icon,
+      .donder-widget.armed_home .donder-mode-icon,
+      .donder-widget.arming .donder-mode-icon,
+      .donder-widget.triggered .donder-mode-icon,
+      .donder-widget.armed_vacation .donder-mode-icon {
         opacity: 1;
       }
-      .donder-mode-wrapper.on {
+      .donder-mode-icon ha-icon{
+        --mdc-icon-size: 20%;
+      }
+      .donder-widget.on {
         background-color: rgba(214, 163, 25, .2);
         border: 2px solid rgb(214, 163, 25);
       }
-      .donder-mode-wrapper.triggered {
+      .donder-widget.triggered {
         background-color: rgba(132, 63, 77, .3);
         border: 2px solid red;
-      }
-      .donder-mode-label {
-        text-transform: uppercase;
-        font-size: 1.2rem;
-        font-weight: 300;
-        font-stretch: extra-expanded;
-        width: 50%;
-      }
-      .donder-mode-state {
-        font-weight: 700;
-        text-transform: uppercase;
-        display: inline-block;
-        font-size: 1.5rem;
-        font-stretch: extra-expanded;
-        margin-right: 20px;
       }
       @media (max-width: 600px) {
         .donder-widget {
@@ -325,11 +296,9 @@ export class BoilerplateCard extends LitElement {
         tabindex="0"
         .label=${`Boilerplate: ${this.config || 'No Entity Defined'}`}
       >
-        <div class='donder-widget'>
-          <div class=${'donder-mode-wrapper '+alarmState+' '+warningState}>
-            <div class='donder-mode-label'>
-              <svg-item state=${alarmIcon}></svg-item>
-            </div>
+        <div class=${'donder-widget '+alarmState+' '+warningState}>
+          <div class='donder-mode-label'>
+            <ha-icon icon="hass:weather-sunny"></ha-icon>
           </div>
         </div>
       </ha-card>
