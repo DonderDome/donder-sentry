@@ -101,7 +101,7 @@ export class BoilerplateCard extends LitElement {
   }
 
   private handleClick(): void {
-    const { env } = this.config
+    const env = this.hass.states['donder_env.global'].attributes
     const alarmState = this.hass.states[this.config.entity].state
     const armedStates = ['armed_away', 'armed_night', 'armed_vacation', 'arming', 'triggered', 'armed_home']
 
