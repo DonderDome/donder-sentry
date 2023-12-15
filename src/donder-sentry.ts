@@ -244,7 +244,7 @@ export class BoilerplateCard extends LitElement {
         .label=${`Boilerplate: ${this.config || 'No Entity Defined'}`}
       >
         <div class=${'donder-widget '+alarmState+' '+warningState}>
-          <div class='donder-mode-label'>
+          <div class='donder-mode-icon'>
             <ha-icon icon="hass:weather-sunny"></ha-icon>
           </div>
         </div>

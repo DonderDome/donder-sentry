@@ -263,7 +263,7 @@ const X=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,
         .label=${`Boilerplate: ${this.config||"No Entity Defined"}`}
       >
         <div class=${"donder-widget "+i+" "+n}>
-          <div class='donder-mode-label'>
+          <div class='donder-mode-icon'>
             <ha-icon icon="hass:weather-sunny"></ha-icon>
           </div>
         </div>
