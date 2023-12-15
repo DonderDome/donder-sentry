@@ -201,11 +201,12 @@ const X=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,
         opacity: 0;
       }
       .donder-widget {
-        background-color: var(--card-background-color);
+        background-color: var(--ha-card-background);
         color: var(--text-primary-color);
         padding: 15px 22px 22px;
         box-sizing: border-box;
         text-align: center;
+        border-radius: var(--ha-card-border-radius)
       }
       .donder-widget .donder-mode-icon {
         opacity: .3;
@@ -234,7 +235,7 @@ const X=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,
         opacity: 1;
       }
       .donder-mode-icon ha-icon{
-        --mdc-icon-size: 20%;
+        --mdc-icon-size: 60%;
       }
       .donder-widget.on {
         background-color: rgba(214, 163, 25, .2);

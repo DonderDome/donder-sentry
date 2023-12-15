@@ -105,69 +105,6 @@ export class BoilerplateCard extends LitElement {
       entity: 'alarm_control_panel.donder_sentry',
       browser_id: localStorage.getItem('browser_mod-browser-id')
     })
-    // const env = this.hass.states['donder_env.global'].attributes
-    // const alarmState = this.hass.states[this.config.entity].state
-    // const armedStates = ['armed_away', 'armed_night', 'armed_vacation', 'arming', 'triggered', 'armed_home']
-
-    // if (env) {
-    //   if (armedStates.includes(alarmState)) {
-    //     this.hass.callService('browser_mod', 'popup', {
-    //       content: {
-    //         type: 'alarm-panel',
-    //         name: 'Donder Sentry',
-    //         show_keypad: true,
-    //         entity: this.config.entity,
-    //       },
-    //       browser_id: localStorage.getItem('browser_mod-browser-id'),
-    //       card_mod: {
-    //         style:{
-    //           "ha-dialog$": `div.mdc-dialog div.mdc-dialog__scrim {
-    //             -webkit-backdrop-filter: blur(0.7em);
-    //             backdrop-filter: blur(0.7em);
-    //             transition: none !important;
-    //             background-color: rgba(0, 0, 0, 0.5) !important;
-    //           } div.mdc-dialog div.mdc-dialog__surface {
-    //             border-radius: 5px;
-    //             width: 400px;
-    //             min-width: 300px !important;
-    //           } div.mdc-dialog div.mdc-dialog__container {
-    //             height: auto !important;
-    //           }
-    //           `,
-    //         }
-    //       }
-    //     })
-    //   } else {
-    //     this.hass.callService('browser_mod', 'popup', {
-    //       content: {
-    //         type: 'custom:donder-custom-component',
-    //         component: 'sentry-modal',
-    //         entity: this.config.entity,
-    //         modes: ['arm_away', 'arm_home', 'arm_vacation']
-    //       },
-    //       left_button: "Close",
-    //       left_button_action: this.hass.callService('browser_mod', 'close_popup', {browser_id: localStorage.getItem('browser_mod-browser-id')}),
-    //       browser_id: localStorage.getItem('browser_mod-browser-id'),
-    //       card_mod: {
-    //         style:{
-    //           "ha-dialog$": `div.mdc-dialog div.mdc-dialog__scrim {
-    //             -webkit-backdrop-filter: blur(0.7em);
-    //             backdrop-filter: blur(0.7em);
-    //             transition: none !important;
-    //             background-color: rgba(0, 0, 0, 0.5) !important;
-    //           } div.mdc-dialog div.mdc-dialog__surface {
-    //             border-radius: 5px;
-    //             width: 400px;
-    //             min-width: 300px !important;
-    //           } div.mdc-dialog div.mdc-dialog__container {
-    //             height: auto !important;
-    //           }
-    //           `,
-    //         }
-    //       }
-    //     }) 
-    //   }
-    // }
   }
 
   protected _handleAction(ev: ActionHandlerEvent): void {
@@ -213,11 +150,12 @@ export class BoilerplateCard extends LitElement {
         opacity: 0;
       }
       .donder-widget {
-        background-color: var(--card-background-color);
+        background-color: var(--ha-card-background);
         color: var(--text-primary-color);
         padding: 15px 22px 22px;
         box-sizing: border-box;
         text-align: center;
+        border-radius: var(--ha-card-border-radius)
       }
       .donder-widget .donder-mode-icon {
         opacity: .3;
@@ -246,7 +184,7 @@ export class BoilerplateCard extends LitElement {
         opacity: 1;
       }
       .donder-mode-icon ha-icon{
-        --mdc-icon-size: 20%;
+        --mdc-icon-size: 60%;
       }
       .donder-widget.on {
         background-color: rgba(214, 163, 25, .2);
