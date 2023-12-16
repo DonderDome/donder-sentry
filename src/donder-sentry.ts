@@ -188,7 +188,7 @@ export class BoilerplateCard extends LitElement {
         opacity: 1;
       }
       .donder-mode-icon ha-icon{
-        --mdc-icon-size: 70%;
+        --mdc-icon-size: 50%;
       }
       .donder-widget.on {
         background-color: rgba(214, 163, 25, .2);
