@@ -254,7 +254,7 @@ const X=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,
           display: block;
         }
       }
-    `}render(){var t,e;if(this.config.show_warning)return this._showWarning("warning message");if(this.config.show_error)return this._showError("error message");const i=this.hass.states[this.config.entity].state,o=null===(t=this.hass.states["donder_sentry.global"])||void 0===t?void 0:t.state,n=o&&(null===(e=JSON.parse(o.replace(/'/g,'"')))||void 0===e?void 0:e.length)>0?"on":"off";return O`
+    `}render(){var t,e;if(this.config.show_warning)return this._showWarning("warning message");if(this.config.show_error)return this._showError("error message");const i=this.hass.states[this.config.entity].state,o=null===(t=this.hass.states["donder_sentry.global"])||void 0===t?void 0:t.state,n=o&&(null===(e=JSON.parse(o.replace(/'/g,'"')))||void 0===e?void 0:e.length)>0?"on":"off";let s;return s=["armed_away","armed_night","armed_vacation","arming","triggered","armed_home"].includes(i)?"shield-home-outline":"shield-off-outline",O`
       <ha-card
         @action=${this._handleAction}
         .actionHandler=${wt({hasHold:gt(this.config.hold_action),hasDoubleClick:gt(this.config.double_tap_action)})}
@@ -263,7 +263,7 @@ const X=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,
       >
         <div class=${"donder-widget "+i+" "+n}>
           <div class='donder-mode-icon'>
-            <ha-icon icon="hass:weather-sunny"></ha-icon>
+            <ha-icon icon=${`hass:${s}`}></ha-icon>
           </div>
         </div>
       </ha-card>

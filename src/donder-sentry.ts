@@ -227,9 +227,9 @@ export class BoilerplateCard extends LitElement {
     let alarmIcon
 
     if (armedStates.includes(alarmState)) {
-      alarmIcon = 'mode-sentry'
+      alarmIcon = 'shield-home-outline'
     } else {
-      alarmIcon = 'mode-normal'
+      alarmIcon = 'shield-off-outline'
     }
 
     return html`
@@ -244,7 +244,7 @@ export class BoilerplateCard extends LitElement {
       >
         <div class=${'donder-widget '+alarmState+' '+warningState}>
           <div class='donder-mode-icon'>
-            <ha-icon icon="hass:weather-sunny"></ha-icon>
+            <ha-icon icon=${`hass:${alarmIcon}`}></ha-icon>
           </div>
         </div>
       </ha-card>
