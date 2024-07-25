@@ -103,7 +103,8 @@ export class BoilerplateCard extends LitElement {
   private handleClick(): void {
     this.hass.callService('browser_mod', 'more_info', {
       entity: 'alarm_control_panel.donder_sentry',
-      browser_id: localStorage.getItem('browser_mod-browser-id')
+      browser_id: localStorage.getItem('browser_mod-browser-id'),
+      size: "wide",
     })
   }
 
