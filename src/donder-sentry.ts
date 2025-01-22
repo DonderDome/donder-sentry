@@ -57,7 +57,7 @@ export class BoilerplateCard extends LitElement {
       throw new Error('Invalid configuration');
     }
 
-    window.location.href = "/5c36e1c9_hakit/ingress";
+    // window.location.href = "/5c36e1c9_hakit/ingress";
 
     if (config.test_gui) {
       getLovelace().setEditMode(true);
