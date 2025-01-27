@@ -57,7 +57,11 @@ export class BoilerplateCard extends LitElement {
       throw new Error('Invalid configuration');
     }
 
-    window.location.href = "/local/ha-dashboard/index.html";
+    // window.location.href = "/local/ha-dashboard/index.html";
+    this.hass.callService('browser_mod', 'navigate', {
+      path: '/local/ha-dashboard/index.html',
+      browser_id: localStorage.getItem('browser_mod-browser-id'),
+    })
 
     if (config.test_gui) {
       getLovelace().setEditMode(true);
