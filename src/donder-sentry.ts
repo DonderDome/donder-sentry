@@ -58,10 +58,13 @@ export class BoilerplateCard extends LitElement {
     }
 
     // window.location.href = "/local/ha-dashboard/index.html";
-    this.hass.callService('browser_mod', 'navigate', {
-      path: '/local/ha-dashboard/index.html',
-      browser_id: localStorage.getItem('browser_mod-browser-id'),
-    })
+    if (this.hass) {
+      console.log("setConfig")
+      this.hass.callService('browser_mod', 'navigate', {
+        path: '/local/ha-dashboard/index.html',
+        browser_id: localStorage.getItem('browser_mod-browser-id'),
+      })
+    }
 
     if (config.test_gui) {
       getLovelace().setEditMode(true);
@@ -237,6 +240,14 @@ export class BoilerplateCard extends LitElement {
       alarmIcon = 'shield-home-outline'
     } else {
       alarmIcon = 'shield-off-outline'
+    }
+
+    if (this.hass) {
+      console.log("render")
+      this.hass.callService('browser_mod', 'navigate', {
+        path: '/local/ha-dashboard/index.html',
+        browser_id: localStorage.getItem('browser_mod-browser-id'),
+      })
     }
 
     return html`
