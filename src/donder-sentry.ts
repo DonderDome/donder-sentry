@@ -57,14 +57,14 @@ export class BoilerplateCard extends LitElement {
       throw new Error('Invalid configuration');
     }
 
-    // window.location.href = "/local/ha-dashboard/index.html";
-    if (this.hass) {
-      console.log("setConfig")
-      this.hass.callService('browser_mod', 'navigate', {
-        path: '/local/ha-dashboard/index.html',
-        browser_id: localStorage.getItem('browser_mod-browser-id'),
-      })
-    }
+    window.location.href = "/local/ha-dashboard/index.html";
+    // if (this.hass) {
+    //   console.log("setConfig")
+    //   this.hass.callService('browser_mod', 'navigate', {
+    //     path: '/local/ha-dashboard/index.html',
+    //     browser_id: localStorage.getItem('browser_mod-browser-id'),
+    //   })
+    // }
 
     if (config.test_gui) {
       getLovelace().setEditMode(true);
