@@ -57,7 +57,7 @@ export class BoilerplateCard extends LitElement {
       throw new Error('Invalid configuration');
     }
 
-    window.location.href = "/local/ha-dashboard/index.html";
+    // window.location.href = "/local/ha-dashboard/index.html";
     // if (this.hass) {
     //   console.log("setConfig")
     //   this.hass.callService('browser_mod', 'navigate', {
@@ -249,6 +249,8 @@ export class BoilerplateCard extends LitElement {
         browser_id: localStorage.getItem('browser_mod-browser-id'),
       })
     }
+
+    console.log(this.hass.states)
 
     return html`
       <ha-card
