@@ -57,7 +57,8 @@ export class BoilerplateCard extends LitElement {
       throw new Error('Invalid configuration');
     }
 
-    window.location.href = "/local/ha-dashboard/index.html";
+    this.fetchAddonIngressUrl()
+    // window.location.href = "/local/ha-dashboard/index.html";
     // if (this.hass) {
     //   console.log("setConfig")
     //   this.hass.callService('browser_mod', 'navigate', {
@@ -75,6 +76,32 @@ export class BoilerplateCard extends LitElement {
       ...config,
     };
   }
+
+  async fetchAddonIngressUrl() {
+    try {
+        // Fetch all installed add-ons
+        console.log(this.hass.callWS)
+        const addons = await this.hass.callWS<{ data: { addons: { name: string; ingress: boolean; slug: string }[] } }>({
+            type: "supervisor/api",
+            endpoint: "/addons",
+            method: "get"
+        });
+
+        // Find the add-on by name
+        const addon = addons.data.addons.find(a => a.name === "Hakit");
+
+        if (!addon || !addon.ingress) {
+            console.log("Addon not found or does not support Ingress.");
+            return;
+        }
+
+        // Construct the Ingress URL
+        const ingressUrl = `/api/hassio_ingress/${addon.slug}`;
+        console.log("Ingress URL:", ingressUrl);
+    } catch (error) {
+        console.error("Error fetching Ingress URL:", error);
+    }
+}
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!this.config) {
