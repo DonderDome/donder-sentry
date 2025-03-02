@@ -56,8 +56,9 @@ export class BoilerplateCard extends LitElement {
     if (!config) {
       throw new Error('Invalid configuration');
     }
-
-    this.fetchAddonIngressUrl()
+    if (this.hass) {
+      this.fetchAddonIngressUrl(this.hass)
+    }
     // window.location.href = "/local/ha-dashboard/index.html";
     // if (this.hass) {
     //   console.log("setConfig")
@@ -77,11 +78,11 @@ export class BoilerplateCard extends LitElement {
     };
   }
 
-  async fetchAddonIngressUrl() {
+  async fetchAddonIngressUrl(hass) {
     try {
         // Fetch all installed add-ons
-        console.log(this.hass.callWS)
-        const addons = await this.hass.callWS<{ data: { addons: { name: string; ingress: boolean; slug: string }[] } }>({
+        console.log(hass.callWS)
+        const addons = await hass.callWS({
             type: "supervisor/api",
             endpoint: "/addons",
             method: "get"
