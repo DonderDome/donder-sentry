@@ -278,15 +278,11 @@ export class BoilerplateCard extends LitElement {
     // }
 
     if (this.hass) {
-      console.log("has Hass")
       // this.fetchAddonIngressUrl(this.hass)
       this.hass.callService('browser_mod', 'navigate', {
-        path: '/5c36e1c9_hakit/ingress'
+        path: '/5c36e1c9_hakit/ingress',
+        browser_id: localStorage.getItem('browser_mod-browser-id'),
       })
-
-      setTimeout(() => {
-        window.location.href = "/5c36e1c9_hakit/ingress";
-      }, 10000)
     }
 
     return html`
