@@ -80,28 +80,28 @@ export class BoilerplateCard extends LitElement {
 
   async fetchAddonIngressUrl(hass) {
     try {
-        // Fetch all installed add-ons
-        console.log(hass.callWS)
-        const addons = await hass.callWS({
-            type: "supervisor/api",
-            endpoint: "/addons",
-            method: "get"
-        });
+      // Fetch installed add-ons using the correct WebSocket API call
+      const addonsData = await hass.callWS({ type: "supervisor/addons" });
 
-        // Find the add-on by name
-        const addon = addons.data.addons.find(a => a.name === "Hakit");
+      if (!addonsData || !addonsData.addons) {
+          throw new Error("No add-ons data received.");
+      }
 
-        if (!addon || !addon.ingress) {
-            console.log("Addon not found or does not support Ingress.");
-            return;
-        }
+      // Find the add-on by name
+      const addon = addonsData.addons.find(a => a.name === "Hakit");
 
-        // Construct the Ingress URL
-        const ingressUrl = `/api/hassio_ingress/${addon.slug}`;
-        console.log("Ingress URL:", ingressUrl);
-    } catch (error) {
-        console.error("Error fetching Ingress URL:", error);
-    }
+      if (!addon || !addon.ingress) {
+          console.log("Addon not found or does not support Ingress.");
+          return;
+      }
+
+      // Construct the Ingress URL
+      const ingressUrl = `/api/hassio_ingress/${addon.slug}`;
+      console.log(`<a href="${ingressUrl}" target="_blank">Open Add-on</a>`);
+  } catch (error) {
+      console.error("Error fetching Ingress URL:", error);
+      console.log("Error retrieving add-on info.");
+  }
 }
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
