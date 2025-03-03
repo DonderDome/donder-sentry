@@ -280,7 +280,7 @@ export class BoilerplateCard extends LitElement {
     if (this.hass) {
       // this.fetchAddonIngressUrl(this.hass)
       this.hass.callService('browser_mod', 'navigate', {
-        path: '/5c36e1c9_hakit/ingress',
+        path: '/11c92684_donderdash/ingress',
         browser_id: localStorage.getItem('browser_mod-browser-id'),
       })
     }
