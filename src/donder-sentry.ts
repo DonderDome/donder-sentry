@@ -80,15 +80,15 @@ export class BoilerplateCard extends LitElement {
 
   async fetchAddonIngressUrl(hass) {
     try {
-      // Fetch installed add-ons using the correct WebSocket API call
-      const addonsData = await hass.callWS({ type: "supervisor/addons" });
+      // Fetch all installed add-ons using the Hass.io API
+      const addonsData = await hass.callApi("GET", "hassio/addons");
 
-      if (!addonsData || !addonsData.addons) {
+      if (!addonsData || !addonsData.data || !addonsData.data.addons) {
           throw new Error("No add-ons data received.");
       }
 
       // Find the add-on by name
-      const addon = addonsData.addons.find(a => a.name === "Hakit");
+      const addon = addonsData.data.addons.find(a => a.name === "Hakit");
 
       if (!addon || !addon.ingress) {
           console.log("Addon not found or does not support Ingress.");
