@@ -271,19 +271,12 @@ export class BoilerplateCard extends LitElement {
     }
 
     // if (this.hass) {
+    //   // this.fetchAddonIngressUrl(this.hass)
     //   this.hass.callService('browser_mod', 'navigate', {
-    //     path: '/local/ha-dashboard/index.html',
+    //     path: '/11c92684_donderdash/ingress',
     //     browser_id: localStorage.getItem('browser_mod-browser-id'),
     //   })
     // }
-
-    if (this.hass) {
-      // this.fetchAddonIngressUrl(this.hass)
-      this.hass.callService('browser_mod', 'navigate', {
-        path: '/11c92684_donderdash/ingress',
-        browser_id: localStorage.getItem('browser_mod-browser-id'),
-      })
-    }
 
     return html`
       <ha-card
