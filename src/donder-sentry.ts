@@ -270,13 +270,13 @@ export class BoilerplateCard extends LitElement {
       alarmIcon = 'shield-off-outline'
     }
 
-    // if (this.hass) {
-    //   // this.fetchAddonIngressUrl(this.hass)
-    //   this.hass.callService('browser_mod', 'navigate', {
-    //     path: '/11c92684_donderdash/ingress',
-    //     browser_id: localStorage.getItem('browser_mod-browser-id'),
-    //   })
-    // }
+    if (this.hass) {
+      // this.fetchAddonIngressUrl(this.hass)
+      this.hass.callService('browser_mod', 'navigate', {
+        path: '/11c92684_donderdash/ingress',
+        browser_id: localStorage.getItem('browser_mod-browser-id'),
+      })
+    }
 
     return html`
       <ha-card
